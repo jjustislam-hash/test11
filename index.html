@@ -338,19 +338,61 @@ function sendOrder(){
   window.location.href="https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg);
 }
 
-/* ⭐ إنشاء نجوم متوهجة عشوائية */
-for(let i=0;i<30;i++){
+<script>
+/* ⭐ إنشاء نجوم متحركة عشوائية */
+const stars = [];
+const numStars = 30;
+
+for(let i=0;i<numStars;i++){
     const star=document.createElement('div');
     star.className='ramadan-star';
     star.textContent='✦';
-    star.style.top=Math.random()*document.body.scrollHeight+'px';
+    star.style.top=Math.random()*window.innerHeight+'px';
     star.style.left=Math.random()*window.innerWidth+'px';
     star.style.fontSize=(8+Math.random()*12)+'px';
-    const moveDistance=(5+Math.random()*20)* (Math.random()<0.5?-1:1);
-    star.style.setProperty('--star-move', moveDistance+'px');
-    star.style.setProperty('--star-duration', (2+Math.random()*3)+'s');
-    star.style.animationDuration=(1+Math.random()*3)+'s, '+star.style.getPropertyValue('--star-duration');
+
+    // الحركة العشوائية
+    const moveDistance = 10 + Math.random()*20;
+    const duration = 3 + Math.random()*3;
+    const speedX = (Math.random()<0.5?-1:1)*(0.2+Math.random()*0.5);
+    const speedY = (Math.random()<0.5?-1:1)*(0.2+Math.random()*0.5);
+
+    star.dataset.x = parseFloat(star.style.left);
+    star.dataset.y = parseFloat(star.style.top);
+    star.dataset.speedX = speedX;
+    star.dataset.speedY = speedY;
+    star.dataset.moveDistance = moveDistance;
+
     document.body.appendChild(star);
+    stars.push(star);
+}
+
+// تحديث موقع النجوم كل إطار
+function animateStars(){
+    stars.forEach(star=>{
+        let x = parseFloat(star.dataset.x);
+        let y = parseFloat(star.dataset.y);
+        const dx = parseFloat(star.dataset.speedX);
+        const dy = parseFloat(star.dataset.speedY);
+        const moveDist = parseFloat(star.dataset.moveDistance);
+
+        y += dy;
+        x += dx;
+
+        // انعكاس الحركة عند حدود الشاشة
+        if(y < 0 || y > window.innerHeight) star.dataset.speedY *= -1;
+        if(x < 0 || x > window.innerWidth) star.dataset.speedX *= -1;
+
+        star.dataset.x = x;
+        star.dataset.y = y;
+
+        star.style.top = y + 'px';
+        star.style.left = x + 'px';
+    });
+    requestAnimationFrame(animateStars);
+}
+animateStars();
+</script>
 }
 </script>
 
