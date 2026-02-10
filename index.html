@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Q Luxury - ثيم رمضاني سماوي</title>
+<title>Q Luxury - رمضان كريم</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -27,30 +27,34 @@ body {
 }
 .stars span {
   position: absolute;
-  width: 2px;
-  height: 2px;
   background: #fff;
   border-radius: 50%;
-  opacity: .8;
+  opacity: 0.8;
   animation: twinkle linear infinite;
 }
 @keyframes twinkle {
-  0% { transform: translateY(120vh); opacity:.2; }
+  0% { transform: translateY(120vh); opacity:0.2; }
   50% { opacity:1; }
-  100% { transform: translateY(-20vh); opacity:.2; }
+  100% { transform: translateY(-20vh); opacity:0.2; }
 }
+
+/* ====== STAR SIZES ====== */
+.stars span:nth-child(odd) { width: 2px; height: 2px; }
+.stars span:nth-child(even) { width: 3px; height: 3px; }
+.stars span:nth-child(3n) { width: 1.5px; height: 1.5px; }
+.stars span:nth-child(4n) { width: 4px; height: 4px; }
 
 /* ====== CRESCENT MOON ====== */
 .ramadan-crescent {
-  position: absolute; /* أمام المحتوى */
+  position: absolute; 
   top: 10px;
   right: 10px;
   width: 70px;
   height: 70px;
   border-radius: 50%;
   box-shadow: -14px 0 0 5px #f5e1a4;
-  animation: crescentFloat 6s ease-in-out infinite;
-  z-index: 5; /* أعلى من المنتجات */
+  animation: crescentFloat 4s ease-in-out infinite;
+  z-index: 5;
 }
 .ramadan-crescent::after {
   content: "✦";
@@ -62,16 +66,29 @@ body {
   animation: starBlink 2.5s ease-in-out infinite;
 }
 @keyframes crescentFloat {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+  0%,100% { transform: translateY(0) rotate(0deg);}
+  50% { transform: translateY(-6px) rotate(5deg);}
 }
 @keyframes starBlink {
   0%,100% { opacity:.3; }
   50% { opacity:1; }
 }
 
+/* ====== RAMADAN TEXT ====== */
+.ramadan-text {
+  position: absolute;
+  top: 5px;
+  right: 100px;
+  font-size: 32px;
+  color: #f5e1a4;
+  font-weight: 700;
+  text-shadow: 0 0 6px #f5e1a4, 0 0 12px #d6b77c, 0 0 18px #f5e1a4;
+  z-index: 6;
+  pointer-events: none;
+}
+
 /* ====== CONTENT ABOVE STARS ====== */
-body > *:not(.stars) {
+body > *:not(.stars):not(.ramadan-text):not(.ramadan-crescent) {
   position: relative;
   z-index: 2;
 }
@@ -99,14 +116,14 @@ h2 {
 .product h3 { font-size: 22px; color: #fff; }
 .product p { color: #ccc; }
 
-/* ====== BUTTONS (عودة الحجم الأصلي) ====== */
+/* ====== BUTTONS ====== */
 .buyNowBtn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     width: 100%;
-    padding: 18px; /* حجم أكبر */
+    padding: 18px; /* الحجم الأصلي */
     border-radius: 14px;
     border: none;
     font-size: 20px;
@@ -121,7 +138,7 @@ h2 {
 .size-title { text-align: center; font-size: 20px; font-weight: 700; color: #f5e1a4; }
 .size-filter { display: flex; justify-content: center; gap: 14px; margin-bottom: 18px; }
 .size-btn {
-  padding: 14px 28px; /* أكبر من السابق */
+  padding: 14px 28px;
   border-radius: 12px;
   background: #0f1f3a;
   color: #fff;
@@ -192,6 +209,9 @@ input, textarea, select {
 <!-- 🌙 CRESCENT MOON -->
 <div class="ramadan-crescent"></div>
 
+<!-- 🕋 RAMADAN TEXT -->
+<div class="ramadan-text">رمضان كريم</div>
+
 <!-- SOCIAL -->
 <div class="social-float">
   <a href="https://www.instagram.com/q.luxury09" target="_blank">
@@ -260,7 +280,7 @@ function buyNow(i){
   prodName.innerText=p.name;
   prodPrice.innerText="₪"+opt.price;
   checkoutPage.style.display="block";
-  // السكرول الطبيعي، بدون نزول تلقائي
+  // بدون نزول تلقائي
 }
 </script>
 
