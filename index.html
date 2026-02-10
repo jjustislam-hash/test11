@@ -15,6 +15,7 @@ body {
     margin: 0;
     padding: 15px;
     color: #333;
+    overflow-x: hidden;
 }
 
 /* 🌙 الهلال */
@@ -31,41 +32,33 @@ body {
   z-index: 999;
 }
 
-/* الهلال نجمة */
-.ramadan-crescent::after {
-  content: "✦";
-  position: absolute;
-  top: 8px;
-  right: 6px;
-  font-size: 14px;
-  color: #d6b77c;
-  animation: starBlink1 2.5s ease-in-out infinite;
-}
-
 @keyframes crescentFloat {
   0% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
   100% { transform: translateY(0); }
 }
 
-/* ⭐ النجوم */
+/* ⭐ نجوم متوهجة */
 .ramadan-star {
-  position: absolute;
-  font-size: 12px;
-  color: #d6b77c;
-  animation: starBlink linear infinite, starMove ease-in-out infinite alternate;
+    position: absolute;
+    color: #d6b77c;
+    font-size: 12px;
+    opacity: 0.5;
+    animation: starBlink 2s infinite alternate, starMove var(--star-duration) ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* توهج النجوم */
 @keyframes starBlink {
-  0%,100% { opacity: 0.2; }
+  0% { opacity: 0.2; }
   50% { opacity: 1; }
+  100% { opacity: 0.2; }
 }
 
-/* حركة أفقية للنجوم */
 @keyframes starMove {
-  0% { transform: translateX(0px); }
-  100% { transform: translateX(var(--star-move)); }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(var(--star-move)); }
+  100% { transform: translateY(0px); }
 }
 
 h2 {
@@ -198,6 +191,7 @@ input, textarea, select {
 
 <body>
 
+<!-- 🌙 الهلال -->
 <div class="ramadan-crescent"></div>
 
 <div class="social-float">
@@ -248,22 +242,6 @@ input, textarea, select {
 
     <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب</button>
 </div>
-
-<script>
-// إضافة 20 نجمة متحركة
-for(let i=0;i<20;i++){
-    const star=document.createElement('div');
-    star.className='ramadan-star';
-    star.textContent='✦';
-    star.style.top=Math.random()*window.innerHeight+'px';
-    star.style.left=Math.random()*window.innerWidth+'px';
-    star.style.fontSize=(8+Math.random()*12)+'px';
-    const moveDistance=(5+Math.random()*20)* (Math.random()<0.5?-1:1);
-    star.style.setProperty('--star-move', moveDistance+'px');
-    star.style.animationDuration=(1.5+Math.random()*3)+'s';
-    document.body.appendChild(star);
-}
-</script>
 
 <script>
 let products = [];
@@ -320,10 +298,9 @@ function buyNow(i){
   lastBuy=[{name:p.name,price:opt.price}];
   document.getElementById("prodName").innerText=p.name;
   document.getElementById("prodPrice").innerText="₪"+opt.price;
-  const checkout = document.getElementById("checkoutPage");
-  checkout.style.display="block";
-  checkout.scrollIntoView({ behavior: "smooth" });
+  document.getElementById("checkoutPage").style.display="block";
   updateCheckout();
+  document.getElementById("checkoutPage").scrollIntoView({behavior:'smooth'});
 }
 
 const shipping={westbank:20,jerusalem:30,inside48:70};
@@ -335,39 +312,45 @@ function updateCheckout(){
 }
 
 function sendOrder(){
-    const name = document.getElementById("fullname").value;
-    const phoneNumber = document.getElementById("phone").value;
-    const addr = document.getElementById("address").value;
-    const region = document.getElementById("region").value;
-    const notesText = document.getElementById("notes").value;
+  const name = document.getElementById("fullname").value;
+  const phone = document.getElementById("phone").value;
+  const addr = document.getElementById("address").value;
+  const region = document.getElementById("region").value;
+  const notes = document.getElementById("notes").value;
 
-    if(!name || !phoneNumber || !addr || region === "none"){
-        alert("يرجى تعبئة جميع البيانات");
-        return;
-    }
+  if(!name || !phone || !addr || region==='none'){
+      alert("يرجى تعبئة جميع البيانات");
+      return;
+  }
 
-    let price = Number(lastBuy[0].price);
-    let total = price + shipping[region];
-    const sizeLabel = currentSize;
-
-    const msg = 
-`طلب جديد:
+  let total = lastBuy[0].price + (shipping[region]||0);
+  let msg = `طلب جديد:
 الاسم: ${name}
-الهاتف: ${phoneNumber}
+الهاتف: ${phone}
 العنوان: ${addr}
 المنطقة: ${region}
-
-المنتج:
-${lastBuy[0].name}
-الحجم: ${sizeLabel}
-سعر العطر: ₪${price}
+المنتج: ${lastBuy[0].name}
+الحجم: ${currentSize}
 المجموع الكلي شامل التوصيل: ₪${total}
+ملاحظات: ${notes}`;
 
-ملاحظات:
-${notesText}`;
+  const waNumber="970595479161";
+  window.location.href="https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg);
+}
 
-    const waNumber = "970595479161";
-    window.location.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
+/* ⭐ إنشاء نجوم متوهجة عشوائية */
+for(let i=0;i<30;i++){
+    const star=document.createElement('div');
+    star.className='ramadan-star';
+    star.textContent='✦';
+    star.style.top=Math.random()*document.body.scrollHeight+'px';
+    star.style.left=Math.random()*window.innerWidth+'px';
+    star.style.fontSize=(8+Math.random()*12)+'px';
+    const moveDistance=(5+Math.random()*20)* (Math.random()<0.5?-1:1);
+    star.style.setProperty('--star-move', moveDistance+'px');
+    star.style.setProperty('--star-duration', (2+Math.random()*3)+'s');
+    star.style.animationDuration=(1+Math.random()*3)+'s, '+star.style.getPropertyValue('--star-duration');
+    document.body.appendChild(star);
 }
 </script>
 
