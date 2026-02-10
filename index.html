@@ -27,6 +27,7 @@ body {
   border-radius: 50%;
   box-shadow: -12px 0 0 4px #d6b77c;
   animation: crescentFloat 6s ease-in-out infinite;
+  opacity: 0.9;
   z-index: 999;
 }
 
@@ -65,7 +66,6 @@ h2 {
     margin-bottom: 22px;
     border-radius: 20px;
     box-shadow: 0 4px 10px #00000015;
-    border: 1px solid #e7dcc7;
     transition: 0.3s;
 }
 
@@ -108,7 +108,26 @@ h2 {
 }
 
 .buyNowBtn:hover {
+    background: #333;
     transform: scale(1.03);
+}
+
+#checkoutPage {
+    background: linear-gradient(180deg, #ffffff, #faf6ee);
+    padding: 22px;
+    border-radius: 22px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px #00000020;
+    display: none;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    font-size: 18px;
+    border: 1px solid #ddd;
 }
 
 .size-title {
@@ -166,7 +185,6 @@ h2 {
 <!-- 🌙 الهلال -->
 <div class="ramadan-crescent"></div>
 
-<!-- أيقونات السوشيال -->
 <div class="social-float">
   <a href="https://www.instagram.com/q.luxury09" target="_blank">
     <img src="WhatsApp Image 2026-02-09 at 8.11.29 PM.jpeg">
@@ -180,15 +198,112 @@ h2 {
 
 <div class="size-title">اختر حجم العلبة</div>
 <div class="size-filter">
-  <button id="size100" class="size-btn">100ml</button>
-  <button id="size50" class="size-btn">50ml</button>
+  <button id="size100" class="size-btn" type="button">100ml</button>
+  <button id="size50" class="size-btn" type="button">50ml</button>
 </div>
 
 <div id="products"></div>
 
-<!-- الكود البرمجي JS تبعك بدون تغيير -->
+<div id="checkoutPage">
+    <h2>إتمام الطلب</h2>
+    <h3 id="prodName" style="text-align:center;"></h3>
+    <h3 id="prodPrice" style="text-align:center;"></h3>
+
+    <label>المنطقة:</label>
+    <select id="region" onchange="updateCheckout()">
+        <option value="none">اختر المنطقة</option>
+        <option value="westbank">الضفة — ₪20</option>
+        <option value="jerusalem">القدس — ₪30</option>
+        <option value="inside48">الداخل — ₪70</option>
+    </select>
+
+    <label>العنوان:</label>
+    <input id="address">
+
+    <label>الاسم:</label>
+    <input id="fullname">
+
+    <label>الهاتف:</label>
+    <input id="phone">
+
+    <label>ملاحظات:</label>
+    <textarea id="notes"></textarea>
+
+    <h3 id="checkoutTotal" style="text-align:center;"></h3>
+
+    <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب</button>
+</div>
+
 <script>
-/* نفس كودك السابق */
+let products = [];
+let currentSize = "100ml";
+
+const unavailable = [
+  "Q Quantum - كيو كوانتوم",
+  "Q Aero Fresh - كيو إيرو فريش"
+];
+
+fetch("products.json")
+  .then(res => res.json())
+  .then(data => {
+      products = data;
+      setActiveSizeButton(currentSize);
+      loadProducts();
+  });
+
+function setActiveSizeButton(size){
+  document.getElementById("size100").classList.toggle("active", size==="100ml");
+  document.getElementById("size50").classList.toggle("active", size==="50ml");
+}
+
+document.getElementById("size100").onclick = () => { currentSize="100ml"; setActiveSizeButton(currentSize); loadProducts(); };
+document.getElementById("size50").onclick = () => { currentSize="50ml"; setActiveSizeButton(currentSize); loadProducts(); };
+
+function loadProducts(){
+    const box = document.getElementById("products");
+    box.innerHTML = "";
+
+    products.forEach((p,i)=>{
+        let display = p.options?.find(o=>o.size===currentSize) || p;
+        if(!display) return;
+
+        box.innerHTML += `
+        <div class="product">
+          <img src="${display.img || p.img}">
+          <h3>${p.name}</h3>
+          <p>${display.desc||""}</p>
+          <p><b>₪${display.price}</b></p>
+          ${unavailable.includes(p.name) ?
+            `<button class="buyNowBtn" style="background:#ccc;color:#000;pointer-events:none">غير متوفر</button>`
+            :
+            `<button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>`
+          }
+        </div>`;
+    });
+}
+
+let lastBuy=[];
+function buyNow(i){
+  const p = products[i];
+  const opt = p.options?.find(o=>o.size===currentSize)||p;
+  lastBuy=[{name:p.name,price:opt.price}];
+  document.getElementById("prodName").innerText=p.name;
+  document.getElementById("prodPrice").innerText="₪"+opt.price;
+  document.getElementById("checkoutPage").style.display="block";
+  updateCheckout();
+}
+
+const shipping={westbank:20,jerusalem:30,inside48:70};
+
+function updateCheckout(){
+  const r=document.getElementById("region").value;
+  let t=lastBuy[0].price+(shipping[r]||0);
+  document.getElementById("checkoutTotal").innerHTML="المجموع: ₪"+t;
+}
+
+function sendOrder(){
+  alert("سيتم تحويلك إلى واتساب");
+}
 </script>
 
 </body>
