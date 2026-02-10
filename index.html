@@ -14,6 +14,7 @@ body {
     margin: 0;
     padding: 15px;
     color: #333;
+    overflow-x: hidden;
 }
 
 /* 🌙 هلال رمضاني */
@@ -50,16 +51,22 @@ body {
   50% { opacity: 1; }
 }
 
-/* ✨ نص رمضان كريم */
-.ramadan-text {
+/* ✨ نجوم متحركة في الخلفية */
+.star {
   position: fixed;
-  top: 30px;
-  left: 100px; /* جنب الهلال */
-  font-size: 28px;
-  color: #f5e1a4;
-  font-weight: 700;
-  text-shadow: 0 0 6px #f5e1a4, 0 0 12px #d6b77c, 0 0 18px #f5e1a4;
-  z-index: 999;
+  width: 2px;
+  height: 2px;
+  background: #d6b77c;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: starMove linear infinite;
+  z-index: 0;
+}
+
+@keyframes starMove {
+  0% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-200px) translateX(50px); opacity: 0.3; }
 }
 
 /* ===== المحتوى ===== */
@@ -173,9 +180,27 @@ input, textarea, select {
 
 <body>
 
-<!-- الهلال والنص -->
+<!-- الهلال -->
 <div class="ramadan-crescent"></div>
-<div class="ramadan-text">رمضان كريم</div>
+
+<!-- نجوم متحركة -->
+<script>
+const starCount = 40;
+for(let i=0;i<starCount;i++){
+    const star = document.createElement('div');
+    star.className = 'star';
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+    const size = 1 + Math.random()*2;
+    const duration = 5 + Math.random()*5; // مدة الحركة عشوائية
+    star.style.left = x+'px';
+    star.style.top = y+'px';
+    star.style.width = size+'px';
+    star.style.height = size+'px';
+    star.style.animationDuration = duration+'s';
+    document.body.appendChild(star);
+}
+</script>
 
 <div class="social-float">
   <a href="https://www.instagram.com/q.luxury09" target="_blank">
