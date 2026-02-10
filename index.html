@@ -38,27 +38,16 @@ body {
   100% { transform: translateY(0); }
 }
 
-/* ⭐ نجوم متوهجة */
+/* ⭐ نجوم متحركة */
 .ramadan-star {
-    position: absolute;
-    color: #d6b77c;
-    font-size: 12px;
-    opacity: 0.5;
-    animation: starBlink 2s infinite alternate, starMove var(--star-duration) ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: 0;
-}
-
-@keyframes starBlink {
-  0% { opacity: 0.2; }
-  50% { opacity: 1; }
-  100% { opacity: 0.2; }
-}
-
-@keyframes starMove {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(var(--star-move)); }
-  100% { transform: translateY(0px); }
+  position: fixed;
+  color: #d6b77c;
+  pointer-events: none;
+  z-index: 900;
+  opacity: 0.6;
+  text-shadow: 0 0 4px #d6b77c, 0 0 8px #d6b77c;
+  user-select: none;
+  transition: opacity 0.5s ease;
 }
 
 h2 {
@@ -246,19 +235,15 @@ input, textarea, select {
 <script>
 let products = [];
 let currentSize = "100ml";
-
-const unavailable = [
-  "Q Quantum - كيو كوانتوم",
-  "Q Aero Fresh - كيو إيرو فريش"
-];
+const unavailable = ["Q Quantum - كيو كوانتوم","Q Aero Fresh - كيو إيرو فريش"];
 
 fetch("products.json")
-  .then(res => res.json())
-  .then(data => {
-      products = data;
-      setActiveSizeButton(currentSize);
-      loadProducts();
-  });
+.then(res => res.json())
+.then(data => {
+    products = data;
+    setActiveSizeButton(currentSize);
+    loadProducts();
+});
 
 function setActiveSizeButton(size){
   document.getElementById("size100").classList.toggle("active", size==="100ml");
@@ -271,22 +256,16 @@ document.getElementById("size50").onclick = () => { currentSize="50ml"; setActiv
 function loadProducts(){
     const box = document.getElementById("products");
     box.innerHTML = "";
-
     products.forEach((p,i)=>{
         let display = p.options?.find(o=>o.size===currentSize) || p;
         if(!display) return;
-
         box.innerHTML += `
         <div class="product">
           <img src="${display.img || p.img}">
           <h3>${p.name}</h3>
           <p>${display.desc||""}</p>
           <p><b>₪${display.price}</b></p>
-          ${unavailable.includes(p.name) ?
-            `<button class="buyNowBtn" style="background:#ccc;color:#000;pointer-events:none">غير متوفر</button>`
-            :
-            `<button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>`
-          }
+          ${unavailable.includes(p.name) ? `<button class="buyNowBtn" style="background:#ccc;color:#000;pointer-events:none">غير متوفر</button>` : `<button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>`}
         </div>`;
     });
 }
@@ -299,12 +278,11 @@ function buyNow(i){
   document.getElementById("prodName").innerText=p.name;
   document.getElementById("prodPrice").innerText="₪"+opt.price;
   document.getElementById("checkoutPage").style.display="block";
+  document.getElementById("checkoutPage").scrollIntoView({behavior:"smooth"});
   updateCheckout();
-  document.getElementById("checkoutPage").scrollIntoView({behavior:'smooth'});
 }
 
 const shipping={westbank:20,jerusalem:30,inside48:70};
-
 function updateCheckout(){
   const r=document.getElementById("region").value;
   let t=lastBuy[0].price+(shipping[r]||0);
@@ -318,31 +296,36 @@ function sendOrder(){
   const region = document.getElementById("region").value;
   const notes = document.getElementById("notes").value;
 
-  if(!name || !phone || !addr || region==='none'){
-      alert("يرجى تعبئة جميع البيانات");
-      return;
+  if(!name || !phone || !addr || region === "none"){
+    alert("يرجى تعبئة جميع البيانات");
+    return;
   }
 
-  let total = lastBuy[0].price + (shipping[region]||0);
-  let msg = `طلب جديد:
+  const price = Number(lastBuy[0].price);
+  const total = price + shipping[region];
+
+  const msg = `طلب جديد:
 الاسم: ${name}
 الهاتف: ${phone}
 العنوان: ${addr}
 المنطقة: ${region}
-المنتج: ${lastBuy[0].name}
-الحجم: ${currentSize}
-المجموع الكلي شامل التوصيل: ₪${total}
-ملاحظات: ${notes}`;
 
-  const waNumber="970595479161";
-  window.location.href="https://wa.me/"+waNumber+"?text="+encodeURIComponent(msg);
+المنتج:
+${lastBuy[0].name}
+الحجم: ${currentSize}
+سعر العطر: ₪${price}
+المجموع الكلي شامل التوصيل: ₪${total}
+
+ملاحظات:
+${notes}`;
+
+  const waNumber = "970595479161";
+  window.location.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(msg);
 }
 
-<script>
-/* ⭐ إنشاء نجوم متحركة عشوائية */
+/* ⭐ نجوم متحركة */
 const stars = [];
 const numStars = 30;
-
 for(let i=0;i<numStars;i++){
     const star=document.createElement('div');
     star.className='ramadan-star';
@@ -350,50 +333,30 @@ for(let i=0;i<numStars;i++){
     star.style.top=Math.random()*window.innerHeight+'px';
     star.style.left=Math.random()*window.innerWidth+'px';
     star.style.fontSize=(8+Math.random()*12)+'px';
-
-    // الحركة العشوائية
-    const moveDistance = 10 + Math.random()*20;
-    const duration = 3 + Math.random()*3;
-    const speedX = (Math.random()<0.5?-1:1)*(0.2+Math.random()*0.5);
-    const speedY = (Math.random()<0.5?-1:1)*(0.2+Math.random()*0.5);
-
     star.dataset.x = parseFloat(star.style.left);
     star.dataset.y = parseFloat(star.style.top);
-    star.dataset.speedX = speedX;
-    star.dataset.speedY = speedY;
-    star.dataset.moveDistance = moveDistance;
-
-    document.body.appendChild(star);
+    star.dataset.speedX = (Math.random()<0.5?-1:1)*(0.2+Math.random()*0.5);
+    star.dataset.speedY = (Math.random()<0.5?-1:1)*(0.2+Math.random()*0.5);
     stars.push(star);
+    document.body.appendChild(star);
 }
 
-// تحديث موقع النجوم كل إطار
 function animateStars(){
     stars.forEach(star=>{
         let x = parseFloat(star.dataset.x);
         let y = parseFloat(star.dataset.y);
-        const dx = parseFloat(star.dataset.speedX);
-        const dy = parseFloat(star.dataset.speedY);
-        const moveDist = parseFloat(star.dataset.moveDistance);
-
-        y += dy;
-        x += dx;
-
-        // انعكاس الحركة عند حدود الشاشة
-        if(y < 0 || y > window.innerHeight) star.dataset.speedY *= -1;
-        if(x < 0 || x > window.innerWidth) star.dataset.speedX *= -1;
-
-        star.dataset.x = x;
-        star.dataset.y = y;
-
-        star.style.top = y + 'px';
-        star.style.left = x + 'px';
+        x += parseFloat(star.dataset.speedX);
+        y += parseFloat(star.dataset.speedY);
+        if(y<0 || y>window.innerHeight) star.dataset.speedY*=-1;
+        if(x<0 || x>window.innerWidth) star.dataset.speedX*=-1;
+        star.dataset.x=x;
+        star.dataset.y=y;
+        star.style.top=y+'px';
+        star.style.left=x+'px';
     });
     requestAnimationFrame(animateStars);
 }
 animateStars();
-</script>
-}
 </script>
 
 </body>
