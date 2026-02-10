@@ -31,7 +31,7 @@ body {
   z-index: 999;
 }
 
-/* نجوم الهلال */
+/* الهلال نجمة */
 .ramadan-crescent::after {
   content: "✦";
   position: absolute;
@@ -41,26 +41,6 @@ body {
   color: #d6b77c;
   animation: starBlink1 2.5s ease-in-out infinite;
 }
-.ramadan-crescent::before {
-  content: "✦";
-  position: absolute;
-  top: 20px;
-  right: 10px;
-  font-size: 12px;
-  color: #d6b77c;
-  animation: starBlink2 3.2s ease-in-out infinite;
-}
-
-/* نجوم إضافية في الصفحة */
-.ramadan-star1, .ramadan-star2, .ramadan-star3 {
-  position: absolute;
-  content: "✦";
-  font-size: 14px;
-  color: #d6b77c;
-}
-.ramadan-star1 { top: 50px; left: 200px; animation: starBlink3 2s ease-in-out infinite; }
-.ramadan-star2 { top: 150px; left: 50px; animation: starBlink4 3.5s ease-in-out infinite; }
-.ramadan-star3 { top: 250px; left: 300px; animation: starBlink5 4s ease-in-out infinite; }
 
 @keyframes crescentFloat {
   0% { transform: translateY(0); }
@@ -68,11 +48,25 @@ body {
   100% { transform: translateY(0); }
 }
 
-@keyframes starBlink1 { 0%,100% {opacity:0.3;} 50% {opacity:1;} }
-@keyframes starBlink2 { 0%,100% {opacity:0.2;} 50% {opacity:0.9;} }
-@keyframes starBlink3 { 0%,100% {opacity:0.25;} 50% {opacity:0.95;} }
-@keyframes starBlink4 { 0%,100% {opacity:0.3;} 50% {opacity:0.85;} }
-@keyframes starBlink5 { 0%,100% {opacity:0.35;} 50% {opacity:0.9;} }
+/* ⭐ النجوم */
+.ramadan-star {
+  position: absolute;
+  font-size: 12px;
+  color: #d6b77c;
+  animation: starBlink linear infinite, starMove ease-in-out infinite alternate;
+}
+
+/* توهج النجوم */
+@keyframes starBlink {
+  0%,100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* حركة أفقية للنجوم */
+@keyframes starMove {
+  0% { transform: translateX(0px); }
+  100% { transform: translateX(var(--star-move)); }
+}
 
 h2 {
     text-align: center;
@@ -204,11 +198,7 @@ input, textarea, select {
 
 <body>
 
-<!-- الهلال والنجوم -->
 <div class="ramadan-crescent"></div>
-<div class="ramadan-star1"></div>
-<div class="ramadan-star2"></div>
-<div class="ramadan-star3"></div>
 
 <div class="social-float">
   <a href="https://www.instagram.com/q.luxury09" target="_blank">
@@ -258,6 +248,22 @@ input, textarea, select {
 
     <button onclick="sendOrder()" class="buyNowBtn">إرسال الطلب</button>
 </div>
+
+<script>
+// إضافة 20 نجمة متحركة
+for(let i=0;i<20;i++){
+    const star=document.createElement('div');
+    star.className='ramadan-star';
+    star.textContent='✦';
+    star.style.top=Math.random()*window.innerHeight+'px';
+    star.style.left=Math.random()*window.innerWidth+'px';
+    star.style.fontSize=(8+Math.random()*12)+'px';
+    const moveDistance=(5+Math.random()*20)* (Math.random()<0.5?-1:1);
+    star.style.setProperty('--star-move', moveDistance+'px');
+    star.style.animationDuration=(1.5+Math.random()*3)+'s';
+    document.body.appendChild(star);
+}
+</script>
 
 <script>
 let products = [];
