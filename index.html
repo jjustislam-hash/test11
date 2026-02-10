@@ -1,5 +1,268 @@
-نجوم متوهجة أكثر وأحجام مختلفة
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q Luxury - ثيم رمضاني سماوي</title>
 
-🌙 هلال يتلألأ مع حركة خفيفة
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
-🕋 نص "رمضان كريم" متوهج فوق الهلال
+<style>
+/* ====== SKY NIGHT THEME ====== */
+body {
+    font-family: "Tajawal", sans-serif;
+    background: linear-gradient(to bottom, #0a1a2e, #020b1a);
+    margin: 0;
+    padding: 15px;
+    color: #eee;
+    overflow-x: hidden;
+}
+
+/* ====== STARS ====== */
+.stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.stars span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: .8;
+  animation: twinkle linear infinite;
+}
+@keyframes twinkle {
+  0% { transform: translateY(120vh); opacity:.2; }
+  50% { opacity:1; }
+  100% { transform: translateY(-20vh); opacity:.2; }
+}
+
+/* ====== CRESCENT MOON ====== */
+.ramadan-crescent {
+  position: absolute; /* أمام المحتوى */
+  top: 10px;
+  right: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: -14px 0 0 5px #f5e1a4;
+  animation: crescentFloat 6s ease-in-out infinite;
+  z-index: 5; /* أعلى من المنتجات */
+}
+.ramadan-crescent::after {
+  content: "✦";
+  position: absolute;
+  top: 8px;
+  right: 6px;
+  font-size: 16px;
+  color: #f5e1a4;
+  animation: starBlink 2.5s ease-in-out infinite;
+}
+@keyframes crescentFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes starBlink {
+  0%,100% { opacity:.3; }
+  50% { opacity:1; }
+}
+
+/* ====== CONTENT ABOVE STARS ====== */
+body > *:not(.stars) {
+  position: relative;
+  z-index: 2;
+}
+
+/* ====== HEADINGS ====== */
+h2 {
+    text-align: center;
+    font-size: 28px;
+    margin: 20px 0;
+    color: #f5e1a4;
+}
+
+/* ====== PRODUCTS ====== */
+.product {
+    background: linear-gradient(180deg, #0f1f3a, #0a1525);
+    padding: 18px;
+    margin-bottom: 22px;
+    border-radius: 20px;
+    border: 1px solid #223355;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    transition: .3s;
+}
+.product:hover { transform: translateY(-5px); }
+.product img { width: 100%; border-radius: 15px; }
+.product h3 { font-size: 22px; color: #fff; }
+.product p { color: #ccc; }
+
+/* ====== BUTTONS (عودة الحجم الأصلي) ====== */
+.buyNowBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 18px; /* حجم أكبر */
+    border-radius: 14px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f5e1a4, #d6b77c);
+    color: #000;
+    transition: .25s;
+}
+.buyNowBtn:hover { transform: scale(1.05); }
+
+/* ====== SIZE BUTTONS ====== */
+.size-title { text-align: center; font-size: 20px; font-weight: 700; color: #f5e1a4; }
+.size-filter { display: flex; justify-content: center; gap: 14px; margin-bottom: 18px; }
+.size-btn {
+  padding: 14px 28px; /* أكبر من السابق */
+  border-radius: 12px;
+  background: #0f1f3a;
+  color: #fff;
+  border: 1px solid #223355;
+  cursor: pointer;
+}
+.size-btn.active {
+  background: linear-gradient(135deg, #f5e1a4, #d6b77c);
+  color: #000;
+}
+
+/* ====== CHECKOUT ====== */
+#checkoutPage {
+    background: linear-gradient(180deg, #0a1a2e, #020b1a);
+    padding: 22px;
+    border-radius: 22px;
+    margin-top: 20px;
+    display: none;
+    border: 1px solid #223355;
+}
+input, textarea, select {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    font-size: 18px;
+    background: #0f1f3a;
+    color: #fff;
+    border: 1px solid #223355;
+}
+
+/* ====== SOCIAL FLOAT ====== */
+.social-float {
+  position: fixed;
+  left: 14px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 5;
+}
+.social-float img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding: 6px;
+  background: #0f1f3a;
+  border: 1px solid #223355;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🌌 STARS -->
+<div class="stars">
+  <span style="left:5%;animation-duration:22s;"></span>
+  <span style="left:15%;animation-duration:18s;"></span>
+  <span style="left:25%;animation-duration:26s;"></span>
+  <span style="left:35%;animation-duration:20s;"></span>
+  <span style="left:45%;animation-duration:28s;"></span>
+  <span style="left:55%;animation-duration:24s;"></span>
+  <span style="left:65%;animation-duration:19s;"></span>
+  <span style="left:75%;animation-duration:30s;"></span>
+  <span style="left:85%;animation-duration:21s;"></span>
+</div>
+
+<!-- 🌙 CRESCENT MOON -->
+<div class="ramadan-crescent"></div>
+
+<!-- SOCIAL -->
+<div class="social-float">
+  <a href="https://www.instagram.com/q.luxury09" target="_blank">
+    <img src="WhatsApp Image 2026-02-09 at 8.11.29 PM.jpeg">
+  </a>
+  <a href="https://www.tiktok.com/@q.luxury09" target="_blank">
+    <img src="WhatsApp Image 2026-02-09 at 8.15.47 PM.jpeg">
+  </a>
+</div>
+
+<h2>🛍️ عطورنا</h2>
+
+<div class="size-title">اختر حجم العلبة</div>
+<div class="size-filter">
+  <button id="size100" class="size-btn">100ml</button>
+  <button id="size50" class="size-btn">50ml</button>
+</div>
+
+<div id="products"></div>
+
+<div id="checkoutPage">
+  <h2>إتمام الطلب</h2>
+  <h3 id="prodName"></h3>
+  <h3 id="prodPrice"></h3>
+</div>
+
+<script>
+let products = [];
+let currentSize = "100ml";
+
+fetch("products.json")
+.then(r=>r.json())
+.then(d=>{
+  products=d;
+  setActive();
+  loadProducts();
+});
+
+function setActive(){
+  size100.classList.toggle("active", currentSize==="100ml");
+  size50.classList.toggle("active", currentSize==="50ml");
+}
+
+size100.onclick=()=>{currentSize="100ml";setActive();loadProducts();}
+size50.onclick=()=>{currentSize="50ml";setActive();loadProducts();}
+
+function loadProducts(){
+  const box=document.getElementById("products");
+  box.innerHTML="";
+  products.forEach((p,i)=>{
+    let opt=p.options?.find(o=>o.size===currentSize)||p;
+    box.innerHTML+=`
+      <div class="product">
+        <img src="${opt.img||p.img}">
+        <h3>${p.name}</h3>
+        <p>${opt.desc||""}</p>
+        <p><b>₪${opt.price}</b></p>
+        <button class="buyNowBtn" onclick="buyNow(${i})">شراء الآن</button>
+      </div>`;
+  });
+}
+
+function buyNow(i){
+  let p=products[i];
+  let opt=p.options?.find(o=>o.size===currentSize)||p;
+  prodName.innerText=p.name;
+  prodPrice.innerText="₪"+opt.price;
+  checkoutPage.style.display="block";
+  // السكرول الطبيعي، بدون نزول تلقائي
+}
+</script>
+
+</body>
+</html>
