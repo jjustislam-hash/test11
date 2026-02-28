@@ -155,7 +155,7 @@ input:focus, textarea:focus, select:focus { border-color: #000; }
 <div class="size-filter" aria-hidden="false">
   <button id="size100" class="size-btn" type="button">100ml</button>
   <button id="size50" class="size-btn" type="button">50ml</button>
-  <button id="size30" class="size-btn" type="button">30ml</button>
+  <button id="size35" class="size-btn" type="button">35ml</button>
 </div>
 
 <div id="products"></div>
@@ -214,7 +214,7 @@ function setActiveSizeButton(size){
 
 document.getElementById("size100").addEventListener("click", () => { currentSize = "100ml"; setActiveSizeButton(currentSize); loadProducts(); });
 document.getElementById("size50").addEventListener("click", () => { currentSize = "50ml"; setActiveSizeButton(currentSize); loadProducts(); });
-document.getElementById("size30").addEventListener("click", () => { currentSize = "30ml"; setActiveSizeButton(currentSize); loadProducts(); });
+document.getElementById("size35").addEventListener("click", () => { currentSize = "35ml"; setActiveSizeButton(currentSize); loadProducts(); });
 
 function loadProducts(){
     const box = document.getElementById("products");
